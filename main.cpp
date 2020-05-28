@@ -60,8 +60,12 @@ using namespace std;
 
 int main()
 {
-    vector<FiguraGeometryczna> wektorFigur;
-    vector<FiguraGeometryczna>::iterator I;
+    //vector<FiguraGeometryczna> wektorFigur;
+    //vector<FiguraGeometryczna>::iterator I;
+    vector<Kolo> wektorKol;
+    vector<Prostokat> wektorProstokatow;
+    vector<Kolo>::iterator IK;
+    vector<Prostokat>::iterator IP;
     Kolo kolo1, kolo2;
     Prostokat prostokat1, prostokat2;
 
@@ -72,15 +76,41 @@ int main()
     prostokat2.dlugoscBokuA = 3;
     prostokat2.dlugoscBokuB = 4;
 
+    wektorKol.push_back(kolo1);
+    wektorKol.push_back(kolo2);
+    wektorProstokatow.push_back(prostokat1);
+    wektorProstokatow.push_back(prostokat2);
+
+    /*
     wektorFigur.push_back(kolo1);
     wektorFigur.push_back(kolo2);
     wektorFigur.push_back(prostokat1);
     wektorFigur.push_back(prostokat2);
+    */
 
+    /*
     for (I = wektorFigur.begin(); I != wektorFigur.end(); ++I)
     {
         cout << "Figury geometryczna jest typu: " << (*I).zwrocNazwe();
         cout << ". Jej pole powierzchni rowna sie: " << (*I).obliczPolePowierzchni();
         cout << endl;
     }
+    */
+
+   for (IK = wektorKol.begin(); IK != wektorKol.end(); ++IK)
+   {
+        cout << "Figury geometryczna jest typu: " << (*IK).zwrocNazwe();
+        cout << ". Dlugosc jej promienia rowna sie: " << (*IK).dlugoscPromienia;
+        cout << ". Jej pole powierzchni rowna sie: " << (*IK).obliczPolePowierzchni();
+        cout << endl;
+   }
+
+   for (IP = wektorProstokatow.begin(); IP != wektorProstokatow.end(); ++IP)
+   {
+        cout << "Figury geometryczna jest typu: " << (*IP).zwrocNazwe();
+        cout << ". Dlugosc jej bokow rowna sie: " << (*IP).dlugoscBokuA << ", " << (*IP).dlugoscBokuB;
+        cout << ". Jej pole powierzchni rowna sie: " << (*IP).obliczPolePowierzchni();
+        cout << endl;
+   }
+
 }
