@@ -1,11 +1,25 @@
 #ifndef PROSTOPADLOSCIAN_HH
 #define PROSTOPADLOSCIAN_HH
 
+/*!
+ * \file
+ * \brief Definicja klasy Prostopadloscian.
+ * Plik zawiera definicję klasy Prostopadloscian,
+ * która jest klasą pochodną klasy Wieloscian.
+ */
+
 #include "wieloscian.hh"
 
-class Prostopadloscian: public Wieloscian {
+/*!
+ * \brief Modeluje pojęcie prostopadłościanu,
+ * którego cechami są zbiory jego punktów
+ * w lokalnym oraz globalnym układzie
+ * odniesienia, a także wektor translacji
+ * i macierz rotacji oraz kąty orientacji 
+ * w tych układach.
+ */
 
-public:
+class Prostopadloscian: public Wieloscian {
 
 };
 

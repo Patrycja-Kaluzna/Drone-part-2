@@ -71,7 +71,12 @@ class SMacierz {
     /*!
      * \brief Realizuje mnozenie macierzy z wektorem
      */ 
-    SWektor <typ, rozmiar> operator * (SWektor <typ, rozmiar> Wek) const;   
+    SWektor <typ, rozmiar> operator * (SWektor <typ, rozmiar> Wek) const;
+
+    /*!
+     * \brief Realizuje mnozenie macierzy z macierza
+     */ 
+    SMacierz <typ, rozmiar> operator * (SMacierz <typ, rozmiar> Mac) const;
 };
 
 /*!
@@ -222,6 +227,31 @@ SWektor <typ, rozmiar> SMacierz<typ, rozmiar>::operator * (SWektor <typ, rozmiar
     }
 
     return pomW;
+}
+
+
+
+/*!
+     * \brief Realizuje mnozenie macierzy z macierza.
+     */ 
+template <typename typ, int rozmiar>
+SMacierz <typ, rozmiar> SMacierz<typ, rozmiar>::operator * (SMacierz <typ, rozmiar> Mac) const
+{
+    unsigned int i, j, k;
+    SMacierz <typ, rozmiar> pomMac;
+
+    for (i = 0; i < rozmiar; ++i)
+    {
+        for (j = 0; j < rozmiar; ++j)
+        {
+            for (k = 0; k < rozmiar; ++k)
+            {
+                pomMac(i, j) += (*this)(i, k) * Mac(k, j);
+            }
+        }   
+    }
+
+    return pomMac;
 }
 
 

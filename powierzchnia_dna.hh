@@ -4,7 +4,6 @@
 /*!
  * \file
  * \brief Definicja klasy Powierzchnia_dna
- * 
  * Plik zawiera definicję klasy Powierzchnia_dna,
  * która jest klasą pochodną klasy Powierzchnia.
  */
@@ -18,6 +17,14 @@
  */
 
 class Powierzchnia_dna: public Powierzchnia {
+
+public:
+
+/*!
+ * \brief Wczytuje z pliku punkty w 
+ * lokalnym układzie odniesienia.
+ */
+Powierzchnia_dna ();
 
 };
 

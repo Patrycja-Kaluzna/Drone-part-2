@@ -1,9 +1,7 @@
-#include "lacze_do_gnuplota.hh"
 #include "scena.hh"
 
 #include <iostream>
 #include <unistd.h>
-#include <iomanip>
 
 using namespace std;
 
@@ -27,90 +25,101 @@ void wyswietl_ilosc_Wektorow3D ()
 }
 
 int main ()
-{
-    string nazwa_pliku_pglobalne = "plaszczyzny/dron2.dat";
-    string nazwa_pliku_kadlub = "plaszczyzny/dron1.dat";
-    string nazwa_pliku_scena = "plaszczyzny/scena.dat";
-    string nazwa_pliku_sruby = "plaszczyzny/graniastoslup-osY.dat";
-    ofstream Punkty_globalne;
-    ifstream Punkty_lokalne;
-    Scena Scena;
-    PzG::LaczeDoGNUPlota Lacze;
-    unsigned int i;
-    char opcja;    
+{  
+    { 
+        string nazwa_pliku_sceny = "punkty/scena.dat";
+        PzG::LaczeDoGNUPlota Lacze;
+        double odleglosc, kat;
+        char opcja, wymiar;
+        unsigned int i;
+        Scena Scena;
    
-    Scena._Dron.wczytaj(nazwa_pliku_kadlub, nazwa_pliku_sruby);
-    Scena.stworz(nazwa_pliku_scena);
+        Scena.stworz(nazwa_pliku_sceny);
 
-    Lacze.UsunWszystkieNazwyPlikow();
-    Lacze.DodajNazwePliku("plaszczyzny/scena.dat");
-    //Lacze.DodajNazwePliku("plaszczyzny/test.dat");
+        Lacze.UsunWszystkieNazwyPlikow();
+        Lacze.DodajNazwePliku("punkty/scena.dat");
 
-    Lacze.ZmienTrybRys(PzG::TR_3D);
-    Lacze.Inicjalizuj();
-    Lacze.UstawZakresX(-100, 100);
-    Lacze.UstawZakresY(-100, 100);
-    Lacze.UstawZakresZ(0, 150);
-    Lacze.UstawRotacjeXZ(40, 60);
+        Lacze.ZmienTrybRys(PzG::TR_3D);
+        Lacze.Inicjalizuj();
 
-    Scena.rysuj(Lacze);
+        Lacze.UstawZakresX(-100, 100);
+        Lacze.UstawZakresY(-100, 100);
+        Lacze.UstawZakresZ(0, 150);
+        Lacze.UstawRotacjeXZ(40, 60);
 
-    wyswietl_menu();
+        Scena.rysuj(Lacze);
+
+        wyswietl_menu();
+        wyswietl_ilosc_Wektorow3D();
+
+        do {
+            cin >> opcja;
+            switch (opcja)
+            {
+                case 'm':
+                {
+                    wyswietl_menu();
+                    wyswietl_ilosc_Wektorow3D();
+                    break;
+                }
+                case 'r':
+                {
+                    cout << "Podaj odległość, na którą ma przemieścić się dron: ";
+                    cin >> odleglosc;
+                    for (i = 0; i < 5; ++i)
+                    {
+                        Scena._Dron.ruch_na_wprost(odleglosc / 5);
+                        if (Scena.czy_kolizja())
+                        {
+                            cout << endl << "Ruch przerwany - nastąpiłaby kolizja drona z przeszkodą." << endl << endl;
+                            Scena._Dron.ruch_na_wprost(-odleglosc / 5);
+                            break;
+                        } else {
+                            Scena.stworz(nazwa_pliku_sceny);
+                            Scena.rysuj(Lacze);
+                            usleep(50000);
+                        }
+                    }
+                    wyswietl_ilosc_Wektorow3D();
+                    break;
+                }
+                case 'o':
+                {
+                    cout << "Podaj kąt, o który ma obrócić się dron (w stopniach): ";
+                    cin >> kat;
+                    cout << "Podaj literę odpowiadającą osi, wokół której ma obrócić się dron (x, y lub z): ";
+                    cin >> wymiar;
+                    for (i = 0; i < 5; ++i)
+                    {
+                        Scena._Dron.zmiana_orientacji((kat / 5), wymiar);
+                        if (Scena.czy_kolizja())
+                        {
+                            cout << endl << "Ruch przerwany - nastąpiłaby kolizja drona z przeszkodą." << endl << endl;
+                            Scena._Dron.zmiana_orientacji((-kat / 5), wymiar);
+                            break;
+                        } else {
+                            Scena.stworz(nazwa_pliku_sceny);
+                            Scena.rysuj(Lacze);
+                            usleep(50000);
+                        }
+                    }
+                    wyswietl_ilosc_Wektorow3D();
+                    break;
+                }
+                case 'k':
+                {
+                    cout << "Koniec działania programu" << endl;
+                    break;
+                }
+                default:
+                {
+                    cout << "Bład: niepoprawna opcja. Wybierz opcje jeszcze raz." << endl;
+                    break;
+                }
+            }
+        } while (opcja != 'k');
+
+        Lacze.UsunWszystkieNazwyPlikow();
+    }
     wyswietl_ilosc_Wektorow3D();
-
-    do {
-        cin >> opcja;
-        switch (opcja)
-        {
-            case 'm':
-            {
-                wyswietl_menu();
-                wyswietl_ilosc_Wektorow3D();
-                break;
-            }
-            case 'r':
-            {
-                double odleglosc;
-                cout << "Podaj odległość, na którą ma przemieścić się dron: ";
-                cin >> odleglosc;
-                for (i = 0; i < 5; ++i)
-                {
-                    Scena._Dron.ruch_na_wprost(odleglosc / 5);
-                    Scena.stworz(nazwa_pliku_scena);
-                    Scena.rysuj(Lacze);
-                    usleep(50000);
-                }
-                wyswietl_ilosc_Wektorow3D();
-                break;
-            }
-            case 'o':
-            {
-                double kat;
-                cout << "Podaj kąt, o który ma obrócić się dron (w stopniach): ";
-                cin >> kat;
-                for (i = 0; i < 5; ++i)
-                {
-                    Scena._Dron.zmiana_orientacji_OZ(kat / 5);
-                    Scena.stworz(nazwa_pliku_scena);
-                    Scena.rysuj(Lacze);
-                    usleep(50000);
-                }
-                wyswietl_ilosc_Wektorow3D();
-                break;
-            }
-            case 'k':
-            {
-                cout << "Koniec działania programu" << endl;
-                wyswietl_ilosc_Wektorow3D();
-                break;
-            }
-            default:
-            {
-                cout << "Bład: niepoprawna opcja. Wybierz opcje jeszcze raz." << endl;
-                break;
-            }
-        }
-    } while (opcja != 'k');
-
-    Lacze.UsunWszystkieNazwyPlikow();
 }
